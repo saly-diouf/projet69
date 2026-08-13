@@ -295,7 +295,7 @@ function betaIncomplete($a, $x, $p, $q) {
     if ($x >= 1) return 1;
     // Approximation par série de continued fraction
     $lbeta = logGamma($p) + logGamma($q) - logGamma($p + $q);
-    $front = exp(powl($x, $p) * log($x) + (1 - $x) * log(1 - $x) - $lbeta) / $p;
+    $front = exp($p * log($x) + ($q - 1) * log(1 - $x) - $lbeta) / $p;
     return $front * betaCF($x, $p, $q);
 }
 
@@ -820,10 +820,10 @@ function interpreterCorrelation($result, $type = 'Pearson', $seuil = 0.05) {
 function interpreterACP($result) {
     $texte = "L'analyse en composantes principales a été réalisée sur {$result['nb_individus']} individus et {$result['nb_variables']} variables. ";
     if (count($result['valeurs_propres']) >= 2) {
-        $v1 = formatNumber($result['variance_expliquee'][0], 1);
-        $v2 = formatNumber($result['variance_expliquee'][1], 1);
+        $v1 = (float) $result['variance_expliquee'][0];
+        $v2 = (float) $result['variance_expliquee'][1];
         $total = $v1 + $v2;
-        $texte .= "La première composante explique {$v1}% de la variance, et la deuxième {$v2}%. ";
+        $texte .= "La première composante explique " . formatNumber($v1, 1) . "% de la variance, et la deuxième " . formatNumber($v2, 1) . "%. ";
         $texte .= "Ensemble, les deux premières composantes expliquent " . formatNumber($total, 1) . "% de la variance totale. ";
         if ($total > 70) {
             $texte .= "Ce pourcentage élevé indique que ces deux dimensions suffisent à résumer l'essentiel de l'information.";
