@@ -44,7 +44,11 @@ function e($str) {
 
 // Redirection
 function redirect($url) {
-    header("Location: $url");
+    if (!headers_sent()) {
+        header("Location: $url");
+    } else {
+        echo '<script>window.location.href="' . $url . '";</script>';
+    }
     exit;
 }
 
